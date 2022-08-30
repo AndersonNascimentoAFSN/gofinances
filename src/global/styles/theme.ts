@@ -11,10 +11,12 @@ export const theme = {
     attention: '#e83f5b',
     attention_light: 'rgba(232, 63,91,0.5)',
     
-    shape: '#ffff',
+    shape: '#FFFFFF',
+    background: '#F0F2F5',
+
     title: '#363f5f',
     text: '#969cb2',
-    background: '#f0f2f5'
+    text_dark: '#000000',
   },
 
   fonts: {
