@@ -15,7 +15,7 @@ export const theme = {
     background: '#F0F2F5',
 
     title: '#363f5f',
-    text: '#969cb2',
+    text: '#969CB3',
     text_dark: '#000000',
   },
 
