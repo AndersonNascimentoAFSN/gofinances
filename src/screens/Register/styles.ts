@@ -12,4 +12,12 @@ export const Form = styled.View`
   padding: ${RFValue(24)}px ${RFValue(24)}px ${RFValue(16)}px;
 `;
 
-export const Fields = styled.View``;
+interface IFieldsProps {
+  direction: "vertical" | "horizontal";
+}
+
+export const Fields = styled.View<IFieldsProps>`
+  flex-direction: ${({ direction }) =>
+    direction === "horizontal" ? "row" : "column"};
+  justify-content: space-between;
+`;

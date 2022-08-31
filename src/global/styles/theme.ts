@@ -16,6 +16,7 @@ export const theme = {
 
     title: '#363f5f',
     text: '#969CB3',
+    text_opacity: 'rgba(150, 156, 179, 0.2)',
     text_dark: '#000000',
   },
 
