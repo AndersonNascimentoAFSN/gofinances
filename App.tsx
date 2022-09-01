@@ -12,7 +12,7 @@ import {
 
 import { theme } from "./src/global/styles/theme";
 import { Dashboard } from "./src/screens/Dashboard";
-import { Register } from "./src/screens/Register";
+import { Category } from "./src/screens/Category";
 
 export function App() {
   const [fontsLoaded] = useFonts({
@@ -30,7 +30,7 @@ export function App() {
       <StatusBar style="light" />
       <ThemeProvider theme={theme}>
         {/* <Dashboard /> */}
-        <Register />
+        <Category />
       </ThemeProvider>
     </>
   );
