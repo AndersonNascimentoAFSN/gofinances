@@ -14,10 +14,12 @@ export const Form = styled.View`
 
 interface IFieldsProps {
   direction: "vertical" | "horizontal";
+  mt: number;
 }
 
 export const Fields = styled.View<IFieldsProps>`
   flex-direction: ${({ direction }) =>
     direction === "horizontal" ? "row" : "column"};
   justify-content: space-between;
+  margin-top: ${({mt}) => (mt && RFValue(mt))}px;
 `;
