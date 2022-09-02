@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from "expo-splash-screen";
 import { ThemeProvider } from "styled-components";
 
 import {
@@ -12,7 +12,8 @@ import {
 
 import { theme } from "./src/global/styles/theme";
 import { Dashboard } from "./src/screens/Dashboard";
-import { Category } from "./src/screens/Category";
+import { Register } from "./src/screens/Register";
+import { View } from "react-native";
 
 export function App() {
   const [fontsLoaded] = useFonts({
@@ -21,17 +22,30 @@ export function App() {
     Poppins_700Bold,
   });
 
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null;
   }
 
   return (
-    <>
+    <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <StatusBar style="light" />
       <ThemeProvider theme={theme}>
         {/* <Dashboard /> */}
-        <Category />
+        <Register />
       </ThemeProvider>
-    </>
+    </View>
   );
 }
