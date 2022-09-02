@@ -22,14 +22,15 @@ interface FormData {
 const schema = Yup.object({
   name: Yup.string().required("Nome é obrigatório"),
   price: Yup.number()
+    .required("Preço é obrigatório")
     .typeError("Informe um valor numérico")
-    .positive("O valor do preço deve ser positivo")
-    .required("Preço é obrigatório"),
+    .positive("O valor do preço deve ser positivo"),
 });
 
 export function Register() {
   const [transactionType, setTransactionType] = useState("");
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -80,7 +81,7 @@ export function Register() {
             <InputForm
               control={control}
               name="name"
-              error={errors.name && errors.name.message}
+              error={errors}
               placeholder="Nome"
               autoCapitalize="sentences"
               autoCorrect={false}
@@ -89,7 +90,7 @@ export function Register() {
             <InputForm
               control={control}
               name="price"
-              error={errors.price && errors.price.message}
+              error={errors}
               placeholder="Preço"
               keyboardType="numeric"
             />

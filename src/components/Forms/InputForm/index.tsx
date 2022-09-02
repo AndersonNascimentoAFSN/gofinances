@@ -1,6 +1,10 @@
 import React from "react";
 import { TextInputProps } from "react-native";
-import { Control, /* Controller, */ useController } from "react-hook-form";
+import {
+  Control,
+  /* Controller, */ useController,
+  FieldErrorsImpl,
+} from "react-hook-form";
 
 import { Input } from "../Input";
 
@@ -9,7 +13,7 @@ import { Container, Error } from "./styles";
 interface IInputFormProps extends TextInputProps {
   control: Control;
   name: string;
-  error: string | undefined;
+  error: FieldErrorsImpl<{ [x: string]: any; }>;
 }
 
 export function InputForm({ control, name, error, ...rest }: IInputFormProps) {
@@ -25,7 +29,7 @@ export function InputForm({ control, name, error, ...rest }: IInputFormProps) {
     <Container>
       <Input onChangeText={onChange} value={value} {...rest} />
 
-      {error && <Error>{error}</Error>}
+      {error[name] && <Error>{error[name]?.message}</Error>}
     </Container>
   );
 }
