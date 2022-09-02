@@ -6,7 +6,7 @@ import {
   Icon,
   Name,
   Separator,
-  Footer
+  Footer,
 } from "./styles";
 import { Header } from "../../components/Header";
 import { categories } from "../../utils/categories";
@@ -17,16 +17,20 @@ interface ICategory {
   name: string;
 }
 
-interface ICategoryProps {
-  category: string;
+interface ICategorySelectProps {
+  category: ICategory;
   setCategory: (category: ICategory) => void;
   closeSelectCategory: () => void;
 }
-export function Category({
+export function CategorySelect({
   category,
   setCategory,
   closeSelectCategory,
-}: ICategoryProps) {
+}: ICategorySelectProps) {
+  function handleCategorySelect(category: ICategory) {
+    setCategory(category);
+  }
+
   return (
     <Container>
       <Header title="Categoria" />
@@ -35,7 +39,10 @@ export function Category({
         data={categories}
         style={{ flex: 1, width: "100%" }}
         renderItem={({ item }) => (
-          <CategoryItem>
+          <CategoryItem
+            onPress={() => handleCategorySelect(item)}
+            isActive={category.key === item.key}
+          >
             <Icon name={item.icon} />
             <Name>{item.name}</Name>
           </CategoryItem>
@@ -44,7 +51,7 @@ export function Category({
       />
 
       <Footer>
-        <Button title="Selecionar" />
+        <Button title="Selecionar" onPress={closeSelectCategory} />
       </Footer>
     </Container>
   );
