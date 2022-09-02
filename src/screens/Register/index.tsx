@@ -14,6 +14,9 @@ export function Register() {
   const [transactionType, setTransactionType] = useState("");
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+
   const [category, setCategory] = useState({
     key: "category",
     name: "Categoria",
