@@ -1,21 +1,42 @@
 import React, { useState } from "react";
-import { Modal } from "react-native";
+import { Keyboard, Modal, TouchableWithoutFeedback, Alert } from "react-native";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+
+import { useForm } from "react-hook-form";
 
 import { Button } from "../../components/Forms/Button";
 import { CategorySelectButton } from "../../components/Forms/CategorySelectButton";
-import { Input } from "../../components/Forms/Input";
+import { InputForm } from "../../components/Forms/InputForm";
 import { TransactionTypeButton } from "../../components/Forms/TransactionTypeButton";
 import { Header } from "../../components/Header";
 import { CategorySelect } from "../CategorySelect";
 
 import { Container, Form, Fields } from "./styles";
 
+interface FormData {
+  [name: string]: string;
+}
+
+const schema = Yup.object({
+  name: Yup.string().required("Nome é obrigatório"),
+  price: Yup.number()
+    .typeError("Informe um valor numérico")
+    .positive("O valor do preço deve ser positivo")
+    .required("Preço é obrigatório"),
+});
+
 export function Register() {
   const [transactionType, setTransactionType] = useState("");
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
-
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const [category, setCategory] = useState({
     key: "category",
@@ -34,46 +55,77 @@ export function Register() {
     setCategoryModalOpen(false);
   }
 
+  function handleRegister(form: FormData): void {
+    if (!transactionType) return Alert.alert("Selecione o tipo da transação");
+    if (category.key === "category")
+      return Alert.alert("Selecione a categoria");
+
+    const data = {
+      name: form.name,
+      price: form.price,
+      transactionType,
+      category: category.key,
+    };
+
+    console.log(data);
+  }
+
   return (
-    <Container>
-      <Header title="Cadastro" />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Container>
+        <Header title="Cadastro" />
 
-      <Form>
-        <Fields direction="vertical">
-          <Input placeholder="Nome" />
-          <Input placeholder="Preço" />
-
-          <Fields direction="horizontal" mt={8}>
-            <TransactionTypeButton
-              title="Income"
-              type="up"
-              onPress={() => handleTransactionTypeSelect("up")}
-              isActive={transactionType === "up"}
+        <Form>
+          <Fields direction="vertical">
+            <InputForm
+              control={control}
+              name="name"
+              error={errors.name && errors.name.message}
+              placeholder="Nome"
+              autoCapitalize="sentences"
+              autoCorrect={false}
             />
-            <TransactionTypeButton
-              title="Outcome"
-              type="down"
-              onPress={() => handleTransactionTypeSelect("down")}
-              isActive={transactionType === "down"}
+
+            <InputForm
+              control={control}
+              name="price"
+              error={errors.price && errors.price.message}
+              placeholder="Preço"
+              keyboardType="numeric"
+            />
+
+            <Fields direction="horizontal" mt={8}>
+              <TransactionTypeButton
+                title="Income"
+                type="up"
+                onPress={() => handleTransactionTypeSelect("up")}
+                isActive={transactionType === "up"}
+              />
+              <TransactionTypeButton
+                title="Outcome"
+                type="down"
+                onPress={() => handleTransactionTypeSelect("down")}
+                isActive={transactionType === "down"}
+              />
+            </Fields>
+
+            <CategorySelectButton
+              title={category.name}
+              onPress={handleOpenSelectCategoryModal}
             />
           </Fields>
 
-          <CategorySelectButton
-            title={category.name}
-            onPress={handleOpenSelectCategoryModal}
+          <Button title="Enviar" onPress={handleSubmit(handleRegister)} />
+        </Form>
+
+        <Modal visible={categoryModalOpen}>
+          <CategorySelect
+            category={category}
+            setCategory={setCategory}
+            closeSelectCategory={handleCloseSelectCategoryModal}
           />
-        </Fields>
-
-        <Button title="Enviar" />
-      </Form>
-
-      <Modal visible={categoryModalOpen}>
-        <CategorySelect
-          category={category}
-          setCategory={setCategory}
-          closeSelectCategory={handleCloseSelectCategoryModal}
-        />
-      </Modal>
-    </Container>
+        </Modal>
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }
